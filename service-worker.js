@@ -1,5 +1,5 @@
 // Define um nome para o cache
-const CACHE_NAME = 'notifica-pwa-cache-v7'; // Nova versão do cache para forçar atualização
+const CACHE_NAME = 'notifica-pwa-cache-v8'; // Nova versão do cache para forçar atualização
 
 // Lista de arquivos para serem cacheados
 const urlsToCache = [
