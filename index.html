@@ -14,17 +14,9 @@
             <p class="subtitle">Crie, personalize e simule notificações push para testar o comportamento em diversos cenários.</p>
         </header>
 
-        <section class="card" id="permission-section">
-            <h2>Permissão de Notificação</h2>
-            <p class="section-description">Verifique e solicite a permissão necessária para enviar notificações.</p>
-            <div class="permission-status">
-                <span class="status-text">Status: <span id="notification-permission-status">Carregando...</span></span>
-                <button id="request-permission-btn" class="button primary-button compact">Solicitar Permissão</button>
-            </div>
-        </section>
+        <!-- A seção de permissão de notificação foi removida. -->
 
-        <!-- As seções abaixo agora iniciam com 'display: none;' e serão mostradas via JS se a permissão estiver 'granted' -->
-        <section class="card" id="notification-generator-section" style="display: none;">
+        <section class="card" id="notification-generator-section">
             <h2>Simular Notificações Personalizadas</h2>
             <p class="section-description">Escolha uma plataforma, tipo de evento e personalize os detalhes da notificação.</p>
 
@@ -90,7 +82,7 @@
             <div id="simulation-message" class="message" style="display: none;"></div>
         </section>
 
-        <section class="card" id="manual-notification-section" style="display: none;">
+        <section class="card" id="manual-notification-section">
             <h2>Enviar Notificação Manual</h2>
             <p class="section-description">Envie uma notificação com um título e corpo personalizados instantaneamente.</p>
             <div class="form-group">
@@ -110,7 +102,7 @@
             <div id="manual-message" class="message" style="display: none;"></div>
         </section>
 
-        <section class="card" id="notification-queue-section" style="display: none;">
+        <section class="card" id="notification-queue-section">
             <h2>Fila de Notificações e Status</h2>
             <p class="section-description">Acompanhe o status das notificações agendadas e enviadas. Notificações ativas (visíveis) podem ser gerenciadas pelo Service Worker.</p>
             <ul id="notification-queue-list">
@@ -121,9 +113,9 @@
     </div>
 
     <script>
-        // Elementos DOM
-        const notificationPermissionStatus = document.getElementById('notification-permission-status');
-        const requestPermissionBtn = document.getElementById('request-permission-btn');
+        // Elementos DOM (alguns foram removidos ou modificados)
+        // const notificationPermissionStatus = document.getElementById('notification-permission-status'); // Removido
+        // const requestPermissionBtn = document.getElementById('request-permission-btn'); // Removido
         const platformSelectGrid = document.getElementById('platform-select-grid');
         const eventTypeSelectGrid = document.getElementById('event-type-select-grid');
         const valueInput = document.getElementById('value-input');
@@ -138,7 +130,7 @@
         const sendManualNotificationBtn = document.getElementById('send-manual-notification-btn');
         const notificationQueueList = document.getElementById('notification-queue-list');
         const simulationMessageDiv = document.getElementById('simulation-message');
-        const manualMessageDiv = document = document.getElementById('manual-message');
+        const manualMessageDiv = document.getElementById('manual-message'); // Corrigido para ser document.getElementById
         const clearQueueBtn = document.getElementById('clear-queue-btn');
 
         // Elementos de Prévia
@@ -159,7 +151,7 @@
         const platformDetails = {
             'pushinpay': { icon: 'https://i.ibb.co/Cp78C2Yy/asvasvas.png', name: 'PushinPay', types: { 
                 'venda': { title: 'Venda aprovada!', body: (value) => `Você realizou uma venda de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}!`, url: 'https://pushinpay.com/vendas' }, 
-                'saque': { title: 'Transferência realizada', body: (value) => `Você fez uma transferência de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}.` }, 
+                'saque': { title: 'Transferência realizada', body: (value) => `Você fez uma transferência de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}.`, url: 'https://pushinpay.com/saques' }, 
                 'deposito': { title: 'Depósito Recebido!', body: (value) => `Seu depósito de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'} foi creditado com sucesso.`, url: 'https://pushinpay.com/depositos' } 
             }},
             'hotmart': { icon: 'https://i.ibb.co/3yfwQ22K/Sem-T-tulo-2.png', name: 'Hotmart', types: { 
@@ -193,39 +185,8 @@
             // Adicione mais plataformas aqui
         };
 
-        // --- Funções Auxiliares ---
-        function updatePermissionStatus() {
-            const statusSection = document.getElementById('permission-section').querySelector('.permission-status');
-            notificationPermissionStatus.textContent = Notification.permission;
-            statusSection.classList.remove('granted', 'denied', 'default');
-
-            if (Notification.permission === 'granted') {
-                statusSection.classList.add('granted');
-                requestPermissionBtn.style.display = 'none';
-                // Mostra as seções se a permissão já foi concedida
-                document.getElementById('notification-generator-section').style.display = 'block';
-                document.getElementById('manual-notification-section').style.display = 'block';
-                document.getElementById('notification-queue-section').style.display = 'block';
-            } else {
-                statusSection.classList.add(Notification.permission === 'denied' ? 'denied' : 'default');
-                requestPermissionBtn.style.display = 'block';
-                // Garante que as seções estão escondidas se a permissão não foi concedida
-                document.getElementById('notification-generator-section').style.display = 'none';
-                document.getElementById('manual-notification-section').style.display = 'none';
-                document.getElementById('notification-queue-section').style.display = 'none';
-            }
-        }
-
-        function requestNotificationPermission() {
-            Notification.requestPermission().then(permission => {
-                updatePermissionStatus();
-                if (permission === 'granted') {
-                    showMessage(simulationMessageDiv, 'Permissão de notificação concedida com sucesso!', 'success');
-                } else {
-                    showMessage(simulationMessageDiv, 'Permissão de notificação negada. Não será possível enviar notificações.', 'error');
-                }
-            });
-        }
+        // --- Funções Auxiliares (updatePermissionStatus e requestNotificationPermission foram removidas/simplificadas) ---
+        // A permissão agora será verificada diretamente em showNotification
 
         function displayPlatforms() {
             platformSelectGrid.innerHTML = '';
@@ -311,6 +272,7 @@
         }
 
         function showNotification(title, body, options = {}) {
+            // Verifica a permissão antes de tentar exibir a notificação
             if (Notification.permission === 'granted') {
                 navigator.serviceWorker.ready.then(registration => {
                     registration.showNotification(title, {
@@ -334,9 +296,21 @@
                         showMessage(simulationMessageDiv, `Erro ao enviar "${title}": ${error.message}`, 'error');
                     });
                 });
-            } else {
-                alert(`Notificação (Permissão Negada):\nTítulo: ${title}\nCorpo: ${body}`);
-                showMessage(simulationMessageDiv, 'Permissão de notificação negada. Não é possível enviar.', 'error');
+            } else if (Notification.permission === 'default') {
+                // Se a permissão ainda não foi solicitada/negada, tenta solicitá-la
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        // Se concedeu agora, tenta exibir a notificação novamente
+                        showNotification(title, body, options);
+                    } else {
+                        // Negou a permissão ou não conseguiu conceder
+                        showMessage(simulationMessageDiv, 'Permissão de notificação negada. Não é possível enviar notificações.', 'error');
+                        alert('Por favor, conceda permissão para notificações. No iOS, adicione o site à tela inicial e abra por lá para ver a solicitação de permissão.');
+                    }
+                });
+            } else { // Notification.permission === 'denied'
+                showMessage(simulationMessageDiv, 'Permissão de notificação negada. Não é possível enviar notificações.', 'error');
+                alert('Você negou a permissão para notificações. Por favor, habilite-as nas configurações do seu navegador/dispositivo.');
             }
         }
 
@@ -431,7 +405,7 @@
         }
 
         // --- Event Listeners ---
-        requestPermissionBtn.addEventListener('click', requestNotificationPermission);
+        // requestPermissionBtn.addEventListener('click', requestNotificationPermission); // Removido, a solicitação é feita em showNotification
 
         simulateNotificationsBtn.addEventListener('click', () => {
             const num = parseInt(numNotificationsInput.value);
@@ -466,7 +440,6 @@
 
         // --- Inicialização ---
         document.addEventListener('DOMContentLoaded', () => {
-            updatePermissionStatus(); // Permanece aqui, apenas verifica e atualiza o UI com o status atual
             displayPlatforms();
             updateNotificationQueueUI();
             updatePreview(); // Inicializa a prévia
