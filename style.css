@@ -1,0 +1,561 @@
+/* Váriaveis de Cor (Paleta Clean/Minimalista) */
+:root {
+    --color-background: #F0F2F5; /* Cinza muito claro, quase branco */
+    --color-card-background: #FFFFFF; /* Branco puro para os cards */
+    --color-text-primary: #333333; /* Texto escuro para boa legibilidade */
+    --color-text-secondary: #666666; /* Texto secundário, para subtítulos ou descrições */
+    --color-border: #E0E0E0; /* Borda suave */
+    --color-primary-button: #007AFF; /* Azul iOS */
+    --color-primary-button-hover: #005BB5; /* Azul mais escuro no hover */
+    --color-success: #34C759; /* Verde sucesso */
+    --color-error: #FF3B30; /* Vermelho erro */
+    --color-info: #17A2B8; /* Azul info para mensagens */
+    --color-shadow: rgba(0, 0, 0, 0.05); /* Sombra suave */
+    --color-preview-background: #F8F8F8; /* Fundo para a prévia */
+    --color-selected-border: var(--color-primary-button); /* Borda para item selecionado */
+    --color-disabled-background: #F0F0F0; /* Fundo para itens desabilitados */
+    --color-disabled-text: #A0A0A0; /* Texto para itens desabilitados */
+    --color-secondary-button: #EFEFEF; /* Botão secundário cinza claro */
+}
+
+/* Fundo Geral e Tipografia */
+body {
+    font-family: 'Inter', 'Roboto', sans-serif; /* Fontes limpas e modernas */
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* App Container */
+#app {
+    max-width: 760px;
+    margin: 25px auto;
+    padding: 20px;
+    background-color: var(--color-card-background);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px var(--color-shadow);
+    overflow: hidden;
+}
+
+/* Cabeçalho */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+header h1 {
+    font-size: 2.2em;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+header .subtitle {
+    font-size: 1.1em;
+    color: var(--color-text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Seções (Cards) */
+.card {
+    background-color: var(--color-card-background);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 10px var(--color-shadow);
+}
+
+.card h2 {
+    font-size: 1.5em;
+    color: var(--color-text-primary);
+    margin-top: 0;
+    margin-bottom: 15px; /* Reduzir margem */
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+.section-description {
+    font-size: 0.95em;
+    color: var(--color-text-secondary);
+    margin-bottom: 25px; /* Aumentar margem para separar do formulário */
+}
+
+/* Grupos de Formulário */
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 0.95em;
+    color: var(--color-text-primary);
+}
+
+/* Inputs e Selects */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: #F8F8F8;
+    color: var(--color-text-primary);
+    font-size: 1em;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--color-primary-button);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+}
+
+select.input-field {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23666666"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+}
+
+optgroup {
+    font-weight: 600;
+    color: var(--color-primary-button);
+    background-color: var(--color-card-background);
+}
+
+optgroup option {
+    color: var(--color-text-primary);
+    background-color: var(--color-card-background);
+    padding: 8px 15px;
+}
+
+textarea.input-field {
+    resize: vertical;
+    min-height: 90px;
+}
+
+/* Botões */
+.button {
+    border: none;
+    border-radius: 8px;
+    padding: 14px 25px;
+    font-size: 1.05em;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+    -webkit-appearance: none;
+    margin-top: 20px;
+}
+
+.primary-button {
+    background-color: var(--color-primary-button);
+    color: var(--color-card-background);
+    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.2);
+}
+
+.primary-button:hover {
+    background-color: var(--color-primary-button-hover);
+    box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.primary-button:active {
+    transform: translateY(0);
+}
+
+.secondary-button {
+    background-color: var(--color-secondary-button);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.secondary-button:hover {
+    background-color: #F8F8F8; /* Mais claro no hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.secondary-button:active {
+    transform: translateY(0);
+}
+
+.button:disabled {
+    background-color: #E0E0E0;
+    color: #B0B0B0;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: translateY(0);
+}
+
+.button.active-simulation {
+    background-color: var(--color-error); /* Muda para vermelho durante a simulação */
+    box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3);
+}
+
+.button.active-simulation:hover {
+    background-color: #CC2C22;
+}
+
+/* Ajustes para o botão dentro do status de permissão */
+.permission-status .button.compact {
+    width: auto;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    margin-top: 0;
+    align-self: center; /* Alinha verticalmente no centro se display flex */
+}
+
+/* Status de Permissão */
+.permission-status {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border: 1px solid;
+    font-weight: 500;
+}
+
+.permission-status .status-text {
+    flex-grow: 1; /* Permite que o texto ocupe o espaço restante */
+}
+
+.permission-status.granted {
+    background-color: rgba(52, 199, 89, 0.1);
+    color: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.permission-status.denied, .permission-status.default {
+    background-color: rgba(255, 59, 48, 0.1);
+    color: var(--color-error);
+    border-color: var(--color-error);
+}
+
+/* Preview de Notificação */
+.notification-preview {
+    background-color: var(--color-preview-background);
+    border: 1px dashed var(--color-border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+
+.notification-preview h3 {
+    margin: 0 0 10px 0;
+    font-size: 1em; /* Menor */
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.notification-preview .preview-info {
+    font-size: 0.85em;
+    color: var(--color-text-secondary);
+    margin-bottom: 15px;
+    border-bottom: 1px dashed var(--color-border);
+    padding-bottom: 10px;
+}
+
+.notification-preview .preview-title {
+    font-weight: 600;
+    font-size: 1.05em;
+    color: var(--color-text-primary);
+    margin: 5px 0;
+}
+
+.notification-preview .preview-body {
+    margin: 5px 0;
+    font-size: 0.95em;
+    color: var(--color-text-secondary); /* Corpo mais discreto */
+}
+
+.notification-preview .preview-url {
+    margin-top: 10px;
+    font-size: 0.85em;
+    color: var(--color-info);
+    word-break: break-all; /* Quebra longas URLs */
+}
+
+/* Mensagens (Success/Error/Info) */
+.message {
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    text-align: center;
+    border: 1px solid;
+    font-weight: 500;
+}
+
+.message.success {
+    background-color: rgba(52, 199, 89, 0.15);
+    color: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.message.error {
+    background-color: rgba(255, 59, 48, 0.15);
+    color: var(--color-error);
+    border-color: var(--color-error);
+}
+
+.message.info {
+    background-color: rgba(23, 162, 184, 0.15);
+    color: var(--color-info);
+    border-color: var(--color-info);
+}
+
+/* Texto de orientação / Info na fila */
+.guidance-text, .info-text {
+    font-size: 0.9em;
+    color: var(--color-text-secondary);
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Estímulos Visuais (Gradientes Suaves) */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top left, rgba(0, 122, 255, 0.05) 0%, transparent 30%),
+                radial-gradient(circle at bottom right, rgba(52, 199, 89, 0.05) 0%, transparent 30%);
+    z-index: -1;
+    pointer-events: none; /* Garante que não interfira com interações */
+}
+
+/* Estilos para a seleção visual (Cards) */
+.selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* 100px mínimo */
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.selection-option {
+    background-color: #F8F8F8;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 80px; /* Altura mínima para consistência */
+    user-select: none; /* Evita seleção de texto ao clicar */
+    -webkit-tap-highlight-color: transparent; /* Remove highlight azul no iOS */
+}
+
+.selection-option img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 5px;
+}
+
+.selection-option span {
+    font-size: 0.85em;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.selection-option:hover {
+    border-color: var(--color-primary-button-hover);
+    box-shadow: 0 4px 10px rgba(0, 122, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.selection-option.selected {
+    border-color: var(--color-selected-border);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3), 0 4px 15px rgba(0, 122, 255, 0.2);
+    background-color: rgba(0, 122, 255, 0.05); /* Leve fundo azul */
+    transform: translateY(-1px);
+}
+
+.selection-option.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--color-disabled-background);
+    color: var(--color-disabled-text);
+    border-color: #D0D0D0;
+    box-shadow: none;
+    transform: none;
+}
+
+.selection-option.disabled:hover {
+    border-color: #D0D0D0; /* Mantém a cor da borda desabilitada */
+    box-shadow: none;
+    transform: none;
+}
+
+/* Estilos da Fila de Notificações */
+#notification-queue-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.queue-item {
+    background-color: #FDFDFD;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.9em;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.queue-item-id {
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-right: 10px;
+}
+
+.queue-item-title {
+    flex-grow: 1;
+    color: var(--color-text-primary);
+}
+
+.queue-item-status {
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.8em;
+    text-transform: uppercase;
+}
+
+.status-pendente {
+    background-color: rgba(255, 193, 7, 0.15); /* Amarelo */
+    color: #FFC107;
+}
+
+.status-agendada {
+    background-color: rgba(23, 162, 184, 0.15); /* Azul */
+    color: var(--color-info);
+}
+
+.status-enviada {
+    background-color: rgba(52, 199, 89, 0.15); /* Verde */
+    color: var(--color-success);
+}
+
+.status-erro {
+    background-color: rgba(255, 59, 48, 0.15); /* Vermelho */
+    color: var(--color-error);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #app {
+        margin: 15px;
+        padding: 15px;
+    }
+    header h1 {
+        font-size: 1.8em;
+    }
+    .card {
+        padding: 20px;
+    }
+    .card h2 {
+        font-size: 1.3em;
+    }
+    .button {
+        font-size: 1em;
+        padding: 12px 20px;
+    }
+    .selection-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Menor em telas menores */
+    }
+    .selection-option img {
+        width: 35px;
+        height: 35px;
+    }
+    .selection-option span {
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    #app {
+        margin: 10px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+    }
+    header h1 {
+        font-size: 1.6em;
+    }
+    .card {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    .card h2 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+    }
+    .input-field {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    .button {
+        padding: 10px 15px;
+        font-size: 0.95em;
+    }
+    .permission-status {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px;
+    }
+    .permission-status .button {
+        width: 100%;
+    }
+    .selection-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* Ainda menor */
+    }
+    .selection-option img {
+        width: 30px;
+        height: 30px;
+    }
+    .selection-option span {
+        font-size: 0.75em;
+    }
+}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -484,4 +485,492 @@
         }
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Notificações PWA</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Gerador de Notificações PWA</h1>
+            <p class="subtitle">Crie, personalize e simule notificações push para testar o comportamento em diversos cenários.</p>
+        </header>
+
+        <section class="card" id="permission-section">
+            <h2>Permissão de Notificação</h2>
+            <p class="section-description">Verifique e solicite a permissão necessária para enviar notificações.</p>
+            <div class="permission-status">
+                <span class="status-text">Status: <span id="notification-permission-status">Carregando...</span></span>
+                <button id="request-permission-btn" class="button primary-button compact">Solicitar Permissão</button>
+            </div>
+        </section>
+
+        <section class="card" id="notification-generator-section" style="display: none;">
+            <h2>Simular Notificações Personalizadas</h2>
+            <p class="section-description">Escolha uma plataforma, tipo de evento e personalize os detalhes da notificação.</p>
+
+            <div class="form-group">
+                <label for="platform-select-grid">Plataforma:</label>
+                <div id="platform-select-grid" class="selection-grid">
+                    <!-- Opções de plataforma serão geradas aqui pelo JS -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="event-type-select-grid">Tipo de Evento:</label>
+                <div id="event-type-select-grid" class="selection-grid">
+                    <p class="guidance-text">Selecione uma plataforma primeiro para ver os tipos de evento disponíveis.</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="value-input">Valor (opcional, para notificação de venda/saque):</label>
+                <input type="number" id="value-input" step="0.01" placeholder="Ex: 99.90" class="input-field" oninput="updatePreview();">
+            </div>
+
+            <div class="form-group">
+                <label for="notification-url">URL ao clicar na notificação (opcional):</label>
+                <input type="url" id="notification-url" placeholder="https://exemplo.com" class="input-field" oninput="updatePreview();">
+            </div>
+
+            <div class="form-group">
+                <label for="vibration-pattern">Padrão de Vibração (ms, separados por vírgula - ex: 200,100,200):</label>
+                <input type="text" id="vibration-pattern" value="200,100,200" placeholder="200,100,200" class="input-field" oninput="updatePreview();">
+            </div>
+
+            <div class="form-group">
+                <label for="sound-select">Som da Notificação (opcional):</label>
+                <select id="sound-select" class="input-field" onchange="updatePreview();">
+                    <option value="">Nenhum (padrão do sistema)</option>
+                    <option value="/assets/sounds/notification1.mp3">Som 1 (Curto)</option>
+                    <option value="/assets/sounds/notification2.mp3">Som 2 (Alerta)</option>
+                    <!-- Adicione mais opções de som aqui -->
+                </select>
+                <p class="guidance-text">Certifique-se de que o arquivo de som existe no caminho especificado.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="num-notifications">Número de Notificações a Enviar:</label>
+                <input type="number" id="num-notifications" value="1" min="1" class="input-field">
+            </div>
+
+            <div class="form-group">
+                <label for="delay-input">Atraso entre Notificações (ms):</label>
+                <input type="number" id="delay-input" value="1000" min="0" class="input-field">
+            </div>
+
+            <div class="notification-preview card">
+                <h3>Prévia da Notificação Selecionada:</h3>
+                <p class="preview-info">Esta é uma representação visual de como sua notificação pode aparecer. O ícone sempre será o do PWA.</p>
+                <p id="previewTitle" class="preview-title">Título da Notificação</p>
+                <p id="previewBody" class="preview-body">Corpo da Notificação</p>
+                <p id="previewUrl" class="preview-url"></p>
+            </div>
+
+            <button id="simulate-notifications-btn" class="button primary-button">Simular Notificações</button>
+            <div id="simulation-message" class="message" style="display: none;"></div>
+        </section>
+
+        <section class="card" id="manual-notification-section" style="display: none;">
+            <h2>Enviar Notificação Manual</h2>
+            <p class="section-description">Envie uma notificação com um título e corpo personalizados instantaneamente.</p>
+            <div class="form-group">
+                <label for="manual-title">Título:</label>
+                <input type="text" id="manual-title" placeholder="Título da Notificação Manual" class="input-field" oninput="updateManualPreview();">
+            </div>
+            <div class="form-group">
+                <label for="manual-body">Corpo:</label>
+                <input type="text" id="manual-body" placeholder="Corpo da Notificação Manual" class="input-field" oninput="updateManualPreview();">
+            </div>
+             <div class="notification-preview card">
+                <h3>Prévia da Notificação Manual:</h3>
+                <p id="manualPreviewTitle" class="preview-title">Título da Notificação Manual</p>
+                <p id="manualPreviewBody" class="preview-body">Corpo da Notificação Manual</p>
+            </div>
+            <button id="send-manual-notification-btn" class="button primary-button">Enviar Notificação Manual</button>
+            <div id="manual-message" class="message" style="display: none;"></div>
+        </section>
+
+        <section class="card" id="notification-queue-section" style="display: none;">
+            <h2>Fila de Notificações e Status</h2>
+            <p class="section-description">Acompanhe o status das notificações agendadas e enviadas. Notificações ativas (visíveis) podem ser gerenciadas pelo Service Worker.</p>
+            <ul id="notification-queue-list">
+                <!-- Notificações pendentes serão listadas aqui -->
+            </ul>
+            <button id="clear-queue-btn" class="button secondary-button">Limpar Fila de Notificações</button>
+        </section>
+    </div>
+
+    <script>
+        // Elementos DOM
+        const notificationPermissionStatus = document.getElementById('notification-permission-status');
+        const requestPermissionBtn = document.getElementById('request-permission-btn');
+        const platformSelectGrid = document.getElementById('platform-select-grid');
+        const eventTypeSelectGrid = document.getElementById('event-type-select-grid');
+        const valueInput = document.getElementById('value-input');
+        const notificationUrlInput = document.getElementById('notification-url');
+        const vibrationPatternInput = document.getElementById('vibration-pattern');
+        const soundSelect = document.getElementById('sound-select');
+        const numNotificationsInput = document.getElementById('num-notifications');
+        const delayInput = document.getElementById('delay-input');
+        const simulateNotificationsBtn = document.getElementById('simulate-notifications-btn');
+        const manualTitleInput = document.getElementById('manual-title');
+        const manualBodyInput = document.getElementById('manual-body');
+        const sendManualNotificationBtn = document.getElementById('send-manual-notification-btn');
+        const notificationQueueList = document.getElementById('notification-queue-list');
+        const simulationMessageDiv = document.getElementById('simulation-message');
+        const manualMessageDiv = document.getElementById('manual-message');
+        const clearQueueBtn = document.getElementById('clear-queue-btn');
+
+        // Elementos de Prévia
+        const previewTitleElem = document.getElementById('previewTitle');
+        const previewBodyElem = document.getElementById('previewBody');
+        const previewUrlElem = document.getElementById('previewUrl');
+        const manualPreviewTitleElem = document.getElementById('manualPreviewTitle');
+        const manualPreviewBodyElem = document.getElementById('manualPreviewBody');
+
+        // Variáveis de Estado
+        let selectedPlatform = null;
+        let selectedEventType = null;
+        let notificationQueue = []; // Fila de notificações pendentes/enviadas
+
+        // --- Detalhes das Plataformas e Tipos de Notificação ---
+        // Adicionei algumas plataformas e tipos de notificação populares para exemplo.
+        // Você pode expandir ou modificar conforme sua necessidade.
+        const platformDetails = {
+            'pushinpay': { icon: 'https://i.ibb.co/Cp78C2Yy/asvasvas.png', name: 'PushinPay', types: { 
+                'venda': { title: 'Venda aprovada!', body: (value) => `Você realizou uma venda de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}!`, url: 'https://pushinpay.com/vendas' }, 
+                'saque': { title: 'Transferência realizada', body: (value) => `Você fez uma transferência de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}.`, url: 'https://pushinpay.com/saques' }, 
+                'deposito': { title: 'Depósito Recebido!', body: (value) => `Seu depósito de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'} foi creditado com sucesso.`, url: 'https://pushinpay.com/depositos' } 
+            }},
+            'hotmart': { icon: 'https://i.ibb.co/3yfwQ22K/Sem-T-tulo-2.png', name: 'Hotmart', types: { 
+                'venda': { title: 'Hotmart: Venda Realizada!', body: (value) => `Sua venda de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'} foi aprovada! ID: HTM0123.`, url: 'https://app.hotmart.com/vendas' }, 
+                'comissao': { title: 'Hotmart: Nova Comissão!', body: (value) => `Comissão de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'} creditada para o produto X.`, url: 'https://app.hotmart.com/comissoes' } 
+            }},
+            'kiwify': { icon: 'https://th.bing.com/th/id/R.6db1fc0048d375ff97e2a6bf31d22c37?rik=Dk6UG41t7zi49w&pid=ImgRaw&r=0', name: 'Kiwify', types: { 
+                'venda': { title: 'Kiwify: Venda Aprovada!', body: (value) => `Venda do produto \"Mentoria\" realizada com sucesso! R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}.`, url: 'https://kiwify.com.br/vendas' }, 
+                'comissao': { title: 'Kiwify: Comissão Gerada!', body: (value) => `Você recebeu uma comissão de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}.`, url: 'https://kiwify.com.br/comissoes' } 
+            }},
+            'kirvano': { icon: 'https://play-lh.googleusercontent.com/Re5vkQcFWrd2QxP-yQlcoqb5Lata3eYAufgwSDtleKQOzlO46l8FRLzQzpp9Mtc5IHw', name: 'Kirvano', types: { 
+                'venda': { title: 'Kirvano: Nova Venda!', body: (value) => `Venda aprovada do produto \"Gestão Empresarial\". Valor: R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}.`, url: 'https://kirvano.com/vendas' }, 
+                'saque': { title: 'Kirvano: Saque Liberado!', body: (value) => `Seu saque de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'} foi liberado para sua conta.`, url: 'https://kirvano.com/saques' } 
+            }},
+            'perfectpay': { icon: 'assets/icons/perfectpay-icon.png', name: 'Perfect Pay', types: { 
+                'venda': { title: 'Perfect Pay: Venda Aprovada!', body: (value) => `Nova venda para \"Desafio Fitness\". Receba sua comissão de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}.`, url: 'https://perfectpay.com.br/vendas' }, 
+                'recebimento': { title: 'Perfect Pay: Recebimento!', body: (value) => `Recebimento de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'} do cliente X.`, url: 'https://perfectpay.com.br/recebimentos' } 
+            }},
+            'utmify': { icon: 'https://i.ibb.co/sGYfnSz/utmify.png', name: 'UTMify', types: { 
+                'geracao_link': { title: 'UTMify: Link Gerado!', body: () => 'Seu novo link UTM foi gerado com sucesso.', url: 'https://utmify.com/links' }, 
+                'acesso_relatorio': { title: 'UTMify: Relatório Disponível!', body: () => 'O relatório de performance dos seus links UTM está pronto.', url: 'https://utmify.com/relatorios' } 
+            }},
+            'stripe': { icon: 'assets/icons/stripe-icon.png', name: 'Stripe', types: {
+                'pagamento_recebido': { title: 'Stripe: Pagamento Recebido!', body: (value) => `Você recebeu um pagamento de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'}.`, url: 'https://dashboard.stripe.com/payments' },
+                'transferencia_concluida': { title: 'Stripe: Transferência Concluída!', body: (value) => `Sua transferência de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'} foi concluída.`, url: 'https://dashboard.stripe.com/payouts' }
+            }},
+            'transferwise': { icon: 'assets/icons/transferwise-icon.png', name: 'TransferWise', types: {
+                'transferencia_chegou': { title: 'TransferWise: Dinheiro Chegou!', body: (value) => `R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'} de sua transferência internacional chegou.`, url: 'https://wise.com/activity' },
+                'transferencia_enviada': { title: 'TransferWise: Transferência Enviada!', body: (value) => `Sua transferência de R$ ${value ? value.toFixed(2).replace('.', ',') : 'X,XX'} foi enviada com sucesso.`, url: 'https://wise.com/activity' }
+            }}
+            // Adicione mais plataformas aqui
+        };
+
+        // --- Funções Auxiliares ---
+        function updatePermissionStatus() {
+            const statusSection = document.getElementById('permission-section').querySelector('.permission-status');
+            notificationPermissionStatus.textContent = Notification.permission;
+            statusSection.classList.remove('granted', 'denied', 'default');
+
+            if (Notification.permission === 'granted') {
+                statusSection.classList.add('granted');
+                requestPermissionBtn.style.display = 'none';
+                document.getElementById('notification-generator-section').style.display = 'block';
+                document.getElementById('manual-notification-section').style.display = 'block';
+                document.getElementById('notification-queue-section').style.display = 'block';
+            } else {
+                statusSection.classList.add(Notification.permission === 'denied' ? 'denied' : 'default');
+                requestPermissionBtn.style.display = 'block';
+                document.getElementById('notification-generator-section').style.display = 'none';
+                document.getElementById('manual-notification-section').style.display = 'none';
+                document.getElementById('notification-queue-section').style.display = 'none';
+            }
+        }
+
+        function requestNotificationPermission() {
+            Notification.requestPermission().then(permission => {
+                updatePermissionStatus();
+                if (permission === 'granted') {
+                    showMessage(simulationMessageDiv, 'Permissão de notificação concedida com sucesso!', 'success');
+                } else {
+                    showMessage(simulationMessageDiv, 'Permissão de notificação negada. Não será possível enviar notificações.', 'error');
+                }
+            });
+        }
+
+        function displayPlatforms() {
+            platformSelectGrid.innerHTML = '';
+            for (const key in platformDetails) {
+                const platform = platformDetails[key];
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('selection-option');
+                optionDiv.dataset.platform = key;
+                optionDiv.innerHTML = `<img src="${platform.icon}" alt="${platform.name}"><span>${platform.name}</span>`;
+                platformSelectGrid.appendChild(optionDiv);
+
+                optionDiv.addEventListener('click', () => {
+                    document.querySelectorAll('#platform-select-grid .selection-option').forEach(card => card.classList.remove('selected'));
+                    optionDiv.classList.add('selected');
+                    selectedPlatform = key;
+                    selectedEventType = null; // Reseta o tipo de evento ao mudar a plataforma
+                    displayEventTypes(key);
+                    updatePreview(); // Atualiza a prévia ao selecionar a plataforma
+                });
+            }
+        }
+
+        function displayEventTypes(platformKey) {
+            eventTypeSelectGrid.innerHTML = '';
+            const types = platformDetails[platformKey].types;
+            if (Object.keys(types).length === 0) {
+                eventTypeSelectGrid.innerHTML = '<p class="guidance-text">Nenhum tipo de evento para esta plataforma.</p>';
+                selectedEventType = null;
+                return;
+            }
+
+            for (const key in types) {
+                const type = types[key];
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('selection-option');
+                optionDiv.dataset.eventType = key;
+                // Formata o texto para exibição (ex: "venda" -> "Venda", "geracao_link" -> "Geração Link")
+                optionDiv.textContent = key.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                eventTypeSelectGrid.appendChild(optionDiv);
+
+                optionDiv.addEventListener('click', () => {
+                    document.querySelectorAll('#event-type-select-grid .selection-option').forEach(card => card.classList.remove('selected'));
+                    optionDiv.classList.add('selected');
+                    selectedEventType = key;
+                    updatePreview(); // Atualiza a prévia ao selecionar o tipo de evento
+                });
+            }
+            updatePreview(); // Atualiza a prévia se houver tipos de evento pré-selecionados (na primeira carga)
+        }
+
+        function updatePreview() {
+            let title = "Título da Notificação";
+            let body = "Corpo da Notificação";
+            let url = "";
+            let value = parseFloat(valueInput.value);
+
+            if (selectedPlatform && selectedEventType) {
+                const platform = platformDetails[selectedPlatform];
+                const eventType = platform.types[selectedEventType];
+                title = eventType.title;
+                body = eventType.body ? eventType.body(value) : '';
+                url = eventType.url || '';
+            }
+
+            // Sobrescreve se houver input manual
+            if (manualTitleInput.value && manualBodyInput.value) {
+                title = manualTitleInput.value;
+                body = manualBodyInput.value;
+                url = notificationUrlInput.value || ''; // URL da notificação manual
+            } else if (notificationUrlInput.value) {
+                 url = notificationUrlInput.value; // Garante que a URL é exibida mesmo sem plataforma selecionada
+            }
+
+            previewTitleElem.textContent = title;
+            previewBodyElem.textContent = body;
+            previewUrlElem.textContent = url ? `Link: ${url}` : '';
+            previewUrlElem.style.display = url ? 'block' : 'none'; // Mostra/esconde o link
+        }
+
+        function updateManualPreview() {
+            manualPreviewTitleElem.textContent = manualTitleInput.value || 'Título da Notificação Manual';
+            manualPreviewBodyElem.textContent = manualBodyInput.value || 'Corpo da Notificação Manual';
+        }
+
+        function showNotification(title, body, options = {}) {
+            if (Notification.permission === 'granted') {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.showNotification(title, {
+                        body: body,
+                        icon: 'assets/icons/icon-512x512.png', // Ícone padrão do PWA
+                        vibrate: options.vibrate || [200, 100, 200],
+                        tag: options.tag || `notification-${Date.now()}`,
+                        renotify: true,
+                        silent: options.silent || false,
+                        sound: options.sound || undefined, // Definido apenas se houver som
+                        data: {
+                            url: options.url || '/' // URL para abrir ao clicar
+                        }
+                    })
+                    .then(() => {
+                        console.log('Notificação exibida com sucesso:', title);
+                        showMessage(simulationMessageDiv, `"${title}" enviada com sucesso!`, 'success');
+                    })
+                    .catch(error => {
+                        console.error('Erro ao exibir notificação:', error);
+                        showMessage(simulationMessageDiv, `Erro ao enviar "${title}": ${error.message}`, 'error');
+                    });
+                });
+            } else {
+                alert(`Notificação (Permissão Negada):\nTítulo: ${title}\nCorpo: ${body}`);
+                showMessage(simulationMessageDiv, 'Permissão de notificação negada. Não é possível enviar.', 'error');
+            }
+        }
+
+        // --- Gerenciamento da Fila de Notificações ---
+        function addNotificationToQueue(notificationData) {
+            const id = Date.now();
+            notificationQueue.push({ id, status: 'Pendente', ...notificationData });
+            updateNotificationQueueUI();
+        }
+
+        function updateNotificationQueueUI() {
+            notificationQueueList.innerHTML = '';
+            if (notificationQueue.length === 0) {
+                notificationQueueList.innerHTML = '<p class="info-text">Nenhuma notificação na fila.</p>';
+                return;
+            }
+            notificationQueue.forEach(note => {
+                const listItem = document.createElement('li');
+                listItem.className = 'queue-item'; // Adiciona classe para estilização
+                listItem.innerHTML = `
+                    <span class="queue-item-id">[ID: ${note.id}]</span>
+                    <span class="queue-item-title">${note.title}</span>
+                    <span class="queue-item-status status-${note.status.toLowerCase()}">${note.status}</span>
+                `;
+                notificationQueueList.appendChild(listItem);
+            });
+        }
+
+        function updateNotificationStatus(id, newStatus) {
+            const index = notificationQueue.findIndex(note => note.id === id);
+            if (index !== -1) {
+                notificationQueue[index].status = newStatus;
+                updateNotificationQueueUI();
+            }
+        }
+
+        async function sendNotificationsSequentially(num, delay) {
+            if (!selectedPlatform || !selectedEventType) {
+                showMessage(simulationMessageDiv, 'Por favor, selecione uma plataforma e um tipo de evento para simular.', 'error');
+                return;
+            }
+
+            const platform = platformDetails[selectedPlatform];
+            const eventType = platform.types[selectedEventType];
+            const value = parseFloat(valueInput.value) || 0;
+            const notificationUrl = notificationUrlInput.value || eventType.url || '/'; // URL da notificação
+            const vibrationPattern = vibrationPatternInput.value.split(',').map(Number).filter(n => !isNaN(n) && n >= 0);
+            const selectedSound = soundSelect.value;
+
+            simulateNotificationsBtn.disabled = true;
+            simulateNotificationsBtn.classList.add('active-simulation');
+            sendManualNotificationBtn.disabled = true; // Desabilita o outro botão durante a simulação
+
+            showMessage(simulationMessageDiv, `Iniciando simulação de ${num} notificações...`, 'info');
+
+            for (let i = 0; i < num; i++) {
+                const title = eventType.title;
+                const body = eventType.body ? eventType.body(value) : '';
+                const tag = `simulated-notification-${selectedPlatform}-${selectedEventType}-${i}-${Date.now()}`; // Garante tag única
+
+                const notificationOptions = {
+                    vibrate: vibrationPattern.length > 0 ? vibrationPattern : [200, 100, 200], // Padrão se vazio/inválido
+                    url: notificationUrl,
+                    tag: tag,
+                    sound: selectedSound || undefined
+                };
+
+                addNotificationToQueue({ title, body, tag, options: notificationOptions, status: 'Agendada' });
+
+                await new Promise(resolve => {
+                    setTimeout(() => {
+                        showNotification(title, body, notificationOptions);
+                        updateNotificationStatus(notificationQueue.find(n => n.tag === tag).id, 'Enviada');
+                        resolve();
+                    }, delay);
+                });
+            }
+            simulateNotificationsBtn.disabled = false;
+            simulateNotificationsBtn.classList.remove('active-simulation');
+            sendManualNotificationBtn.disabled = false;
+            showMessage(simulationMessageDiv, `Simulação de ${num} notificações concluída!`, 'success');
+        }
+
+        // --- Feedback Visual ---
+        function showMessage(element, message, type) {
+            element.textContent = message;
+            element.className = `message ${type}`;
+            element.style.display = 'block';
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 5000); // Esconde a mensagem após 5 segundos
+        }
+
+        // --- Event Listeners ---
+        requestPermissionBtn.addEventListener('click', requestNotificationPermission);
+
+        simulateNotificationsBtn.addEventListener('click', () => {
+            const num = parseInt(numNotificationsInput.value);
+            const delay = parseInt(delayInput.value);
+            sendNotificationsSequentially(num, delay);
+        });
+
+        sendManualNotificationBtn.addEventListener('click', () => {
+            const title = manualTitleInput.value || 'Notificação Manual';
+            const body = manualBodyInput.value || 'Esta é uma notificação enviada manualmente.';
+            
+            showNotification(title, body, { 
+                tag: 'manual-notification-' + Date.now(),
+                url: notificationUrlInput.value || '/', // Usa a URL geral se preenchida
+                vibrate: vibrationPatternInput.value.split(',').map(Number).filter(n => !isNaN(n) && n >= 0) || [200,100,200],
+                sound: soundSelect.value || undefined
+            });
+            
+            addNotificationToQueue({ title, body, status: 'Enviada' });
+            
+            // Limpa os campos manuais após o envio
+            manualTitleInput.value = '';
+            manualBodyInput.value = '';
+            updateManualPreview();
+        });
+
+        clearQueueBtn.addEventListener('click', () => {
+            notificationQueue = [];
+            updateNotificationQueueUI();
+            showMessage(notificationQueueList.parentElement.querySelector('.section-description'), 'Fila de notificações limpa.', 'info');
+        });
+
+        // --- Inicialização ---
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePermissionStatus();
+            displayPlatforms();
+            updateNotificationQueueUI();
+            updatePreview(); // Inicializa a prévia
+            updateManualPreview(); // Inicializa a prévia manual
+        });
+
+        // Registro do Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registrado com sucesso:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Falha no registro do Service Worker:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+>>>>>>> 39c1c6ef70e16b20431de6af8219e4fad46a15ff
 </html>
